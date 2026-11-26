@@ -86,7 +86,7 @@ Run the complete local acceptance gate:
 npm run check
 ```
 
-This performs TypeScript checks, unit/security tests, two-origin manifest/CORS/bridge verification and production builds for both sites. See [the demo runbook](docs/DEMO_RUNBOOK.md) for local verification and [public deployment notes](docs/DEPLOYMENT.md) for the two Pages projects.
+This performs TypeScript checks, unit/security tests, two-origin manifest/CORS/bridge verification and production builds for both sites. See [the demo runbook](docs/DEMO_RUNBOOK.md), [public deployment notes](docs/DEPLOYMENT.md), and the [90-second video script](docs/VIDEO_SCRIPT.md) for repeatable testing and submission preparation.
 
 ## Normative baseline and provenance
 

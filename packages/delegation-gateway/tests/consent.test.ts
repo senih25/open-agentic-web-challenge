@@ -8,8 +8,8 @@ import {
   preparePeerRequest,
   projectPayload,
   verifyDisclosureReceipt,
-} from "../src/index.js";
-import type { DisclosureField, PeerRequest } from "../src/index.js";
+} from "../src/index.ts";
+import type { DisclosureField, PeerRequest } from "../src/index.ts";
 
 const fields: DisclosureField[] = [
   { path: "service.category", label: "Service category", purpose: "Route to the right public service", dataClass: "public", required: true },

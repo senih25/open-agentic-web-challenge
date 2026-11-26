@@ -1,5 +1,5 @@
-import { canonicalJson, sha256Hex } from "./canonical.js";
-import type { ConsentDecision, DisclosureField, DisclosureReceipt } from "./types.js";
+import { canonicalJson, sha256Hex } from "./canonical.ts";
+import type { ConsentDecision, DisclosureField, DisclosureReceipt } from "./types.ts";
 
 export async function createDisclosureReceipt(input: {
   decision: ConsentDecision;

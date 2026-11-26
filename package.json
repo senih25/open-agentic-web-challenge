@@ -5,13 +5,25 @@
   "description": "TrustMesh: consent-carrying service handoffs for the Open Agentic Web",
   "type": "module",
   "scripts": {
+    "sync:runtime": "node scripts/sync-runtime.mjs",
+    "networks:build": "node scripts/build-networks.mjs",
+    "predev": "npm run sync:runtime && npm run networks:build",
+    "predev:partner": "npm run sync:runtime && npm run networks:build",
     "dev": "vite --config vite.config.ts",
-    "build": "vite build --config vite.config.ts",
+    "dev:partner": "vite --config vite.partner.config.ts",
+    "build:trustmesh": "vite build --config vite.config.ts",
+    "build:partner": "vite build --config vite.partner.config.ts",
+    "pages:build:trustmesh": "npm run sync:runtime && npm run networks:build && npm run build:trustmesh",
+    "pages:build:partner": "npm run sync:runtime && npm run networks:build && npm run build:partner",
+    "build": "npm run sync:runtime && npm run networks:build && npm run build:trustmesh && npm run build:partner",
     "preview": "vite preview --config vite.config.ts",
-    "typecheck": "tsc --noEmit -p packages/delegation-gateway/tsconfig.json",
+    "preview:partner": "vite preview --config vite.partner.config.ts",
+    "typecheck": "tsc --noEmit -p packages/delegation-gateway/tsconfig.json && tsc --noEmit -p tsconfig.app.json",
     "test": "vitest run",
     "test:gateway": "vitest run packages/delegation-gateway/tests",
-    "check": "npm run typecheck && npm test && npm run build"
+    "test:runtime": "vitest run packages/web-runtime/tests",
+    "test:two-origin": "node scripts/test-two-origin.mjs",
+    "check": "npm run typecheck && npm test && npm run test:two-origin && npm run build"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

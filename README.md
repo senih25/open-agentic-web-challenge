@@ -1,83 +1,107 @@
-# Open Agentic Web Challenge — TrustMesh
+# TrustMesh — Open Agentic Web Challenge
 
-**A browser-native, permissioned agent network with portable delegation and verifiable execution receipts.**
+**An open agentic web network with consent-bound delegation, origin-aware execution and verifiable disclosure receipts.**
 
-TrustMesh is a public, open-source agentic website built for the Cognizant Open Agentic Web Challenge. It demonstrates independent websites publishing discoverable agent networks, browser-side execution, human-approved cross-site delegation, and reviewable execution receipts.
+TrustMesh is an independently built challenge entry for the Cognizant Open Agentic Web Challenge. It demonstrates how two ordinary websites can publish portable agent networks while keeping cross-site disclosure under explicit user control.
 
-> Status: foundation created; implementation in progress. Conformance is NOT claimed until the pinned challenge profile passes the acceptance suite.
+## The product
 
-## Product thesis
+A visitor starts on TrustMesh, the caller website. Its browser runtime can discover the independent Open Housing Guide network published on a second origin. Before the peer is contacted, the visitor reviews the destination. After the public network has been fetched and validated, a second review binds the exact request payload and chosen fields to a disclosure decision. Peer calls receive only the approved projection; private browser context and credentials are not forwarded.
 
-Agents should be able to collaborate across the web without silently inheriting a user's permissions. TrustMesh makes each delegation's origin, capability, payload scope, side effects, approval and outcome visible.
+The partner is deliberately read-only and uses fictional sample data. It cannot submit applications, assess eligibility, contact an agency or claim that a real service has been checked.
 
-## Judge-facing hero workflow
+## Why it is different
 
-1. Two independently hosted sites publish public agent-network JSON and browser runtime files.
-2. A visitor asks the TrustMesh front agent to run a bounded research workflow.
-3. The runtime validates its network before any model call.
-4. TrustMesh requests delegation to the partner site's research agent.
-5. A consent panel displays origin, purpose, exact capability, data preview, effect and expiry.
-6. The user approves or rejects; rejection blocks dispatch.
-7. The partner agent returns schema-validated structured evidence.
-8. The front agent synthesizes the evidence.
-9. A redacted execution receipt records origins, manifest digests, consent events, capability calls and outcomes.
+- **Two-stage, origin-aware consent:** approval to discover a peer is separate from approval to send an exact data payload.
+- **Approval-bound payloads:** field allowlists and SHA-256 payload digests are checked again before dispatch.
+- **Deny-by-default private context:** browser cookies, local storage, provider credentials and private runtime context are not sent to peer networks.
+- **Read-only peer bridge:** the partner only exposes explicitly registered read capabilities to the caller.
+- **Fail-closed policy:** missing consent UI, invalid payloads and unapproved origins stop the invocation.
+- **Reviewable evidence:** consent receipts record the fields shared or withheld without storing the sample values.
+- **Reusable verification:** an automated two-origin checker exercises manifest, network, CORS and bridge publication.
 
-## Differentiators
+## Current implementation status
 
-- Consent-first cross-origin delegation bound to origin, manifest digest, agent, capability, payload and expiry.
-- Declarative manifests; remote JSON is never executed as code.
-- Strict schema validation and capability allowlisting.
-- Redacted, verifiable execution receipts.
-- Reusable conformance and adversarial test fixtures released for the community.
-- Optional PBT-G integration as a local safety adapter, never a hosted-runtime dependency.
+The local two-origin MVP is implemented and builds successfully. The repository has unit/security tests and a repeatable two-origin conformance check. The normal-browser pages load without console errors in the tested Chrome session.
 
-## Challenge deliverables
+**This is not yet a fully submitted or publicly deployed entry.** A real provider-backed chat run, externally hosted HTTPS deployments, clean-browser public-origin interoperability, final screenshots, a personally recorded demo video and the Devpost submission remain release gates. The built-in browser mock is deterministic test scaffolding, not a real LLM, and must never be enabled on public origins.
 
-- Public, profile-conformant `.json` agent-network file.
-- Browser runtime using standard web technologies.
-- User/agent interaction interface.
-- Successful interaction with an independent agentic website.
-- Public HTTPS deployment, English description and test instructions.
-- Public YouTube demo under two minutes, with the entrant personally explaining the project.
-- Screenshots and rule-compliant original/licensed media.
+Conformance is claimed only for the specific checks listed in [the compliance matrix](docs/CHALLENGE_COMPLIANCE.md), not for the full challenge profile.
 
-See [compliance matrix](docs/CHALLENGE_COMPLIANCE.md), [product brief](docs/PRODUCT_BRIEF.md), [architecture](docs/ARCHITECTURE.md), [threat model](docs/THREAT_MODEL.md), [roadmap](docs/ROADMAP.md).
+## Judge-facing workflow
+
+1. Two independently hosted sites publish a public `agent-manifest.json`, a resolved network definition and their browser runtime assets.
+2. A visitor asks the TrustMesh front agent to find public information.
+3. The caller runtime validates the peer manifest and network before invocation.
+4. The visitor reviews the peer origin and approves discovery.
+5. The caller shows a second consent screen for the exact proposed fields and payload.
+6. The visitor approves or rejects. Rejection prevents the partner call.
+7. The peer receives only the approved projection and returns fictional read-only guidance.
+8. The caller reports the result and records a redacted receipt.
 
 ## Repository layout
 
+```text
+apps/trustmesh-site/        Caller website and TrustMesh agent
+apps/partner-demo-site/     Independent Open Housing Guide partner
+packages/web-runtime/       Browser runtime adapter and profile tests
+packages/delegation-gateway/Consent, payload projection and receipt logic
+packages/conformance/       Upstream-derived network builder/checker
+config/networks/            Canonical HOCON network sources
+scripts/                    Runtime sync, network generation and E2E checks
+spec/pinned/                Exact challenge-start MVP Profile 0.2 source
+docs/                       Product, architecture, security and release evidence
 ```
-apps/trustmesh-site/       Public agentic website and UI
-apps/partner-demo-site/    Independent second-origin website
-packages/web-runtime/      Profile-compatible browser runtime adapter
-packages/delegation-gateway/ Consent, origin and capability policy
-packages/receipts/         Redacted execution receipts and verification
-packages/conformance/      Profile validators and fixtures
-spec/pinned/               Exact challenge profile and source metadata
-docs/                      Architecture, compliance, threat model, demo
-tests/integration/         Two-origin end-to-end tests
-tests/security/            Adversarial policy tests
+
+## Run locally
+
+Requirements: Node.js 24 and npm.
+
+Install dependencies:
+
+```powershell
+npm ci
 ```
 
-## Development principles
+Start the caller in terminal 1:
 
-- Build against the exact challenge-start MVP Profile 0.2/0.3, not moving upstream main.
-- Never evaluate executable code from a fetched manifest.
-- Never send model credentials, cookies, local storage or browser-profile data to another origin.
-- Bind approval to an exact request and expire it.
-- Treat remote agent output as untrusted data.
-- Enforce timeouts, call budgets, depth limits, cancellation and payload limits.
-- Keep the public network definition separate from confidential site policy.
-- The public website must work in a normal browser without PBT-G or Desktop Commander.
+```powershell
+npm run dev
+```
 
-## Existing PBT-G components
+Start the independent partner in terminal 2:
 
-Potential adapters only; do not copy private implementation wholesale:
-- `senih25/browser-edition-desktop`
-- `senih25/pbt-native-core`
-- `senih25/pbtg-browser-qa-guard`
+```powershell
+npm run dev:partner
+```
 
-Use only code with clear provenance, redistribution rights and compatible licenses. Keep the contest submission's original work and post-start changes auditable.
+Open the two distinct local origins:
+
+- http://127.0.0.1:4173/
+- http://localhost:4174/
+
+Run the complete local acceptance gate:
+
+```powershell
+npm run check
+```
+
+This performs TypeScript checks, unit/security tests, two-origin manifest/CORS/bridge verification and production builds for both sites. See [the demo runbook](docs/DEMO_RUNBOOK.md) for local verification and [public deployment notes](docs/DEPLOYMENT.md) for the two Pages projects.
+
+## Normative baseline and provenance
+
+The repository pins **MVP Profile 0.2 (6 November 2026)**, the challenge-start specification identified in the repository's source history. The moving Profile 0.3 document is not silently substituted for the challenge-start baseline. See [the pinned specification](spec/pinned/README.md), [the compliance matrix](docs/CHALLENGE_COMPLIANCE.md) and [upstream provenance](docs/UPSTREAM_PROVENANCE.md).
+
+Cognizant Agentic Web and nsDeploy-derived files retain their Apache-2.0 notices. The project does not imply endorsement by Cognizant, Mozilla, MIT, AWS or other upstream authors.
+
+## Security
+
+See [the threat model](docs/THREAT_MODEL.md) and [security reporting policy](SECURITY.md). Do not place secrets, API keys, browser cookies, private datasets or personal data in public manifests, HOCON, test fixtures, issues or screenshots.
+
+## Roadmap and release gates
+
+The competition deadline is 11 January 2027 at 08:00 Pacific Time. A release is not complete until the two sites are publicly deployed over HTTPS, a real model-backed workflow is recorded, an independent browser can complete the peer handoff, and the submission media and Devpost entry are reviewed. See [the roadmap](docs/ROADMAP.md).
 
 ## License
 
-TBD pending provenance and dependency review. No license is implied until a LICENSE file is added.
+Apache-2.0 for TrustMesh-authored code and documentation, subject to the notices and provenance of incorporated upstream-derived components.

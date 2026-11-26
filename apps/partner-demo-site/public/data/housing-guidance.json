@@ -1,0 +1,50 @@
+{
+  "notice": "FICTIONAL DEMONSTRATION DATA — not an official housing program, not legal advice, not a live service and not an eligibility decision.",
+  "records": [
+    {
+      "id": "sample-renter-basics",
+      "title": "Renter information basics",
+      "category": "housing",
+      "region": "general",
+      "overview": "A sample overview of topics a renter may wish to check in an official tenancy guide.",
+      "topics": ["written agreements", "repairs", "deposit records", "notice periods"],
+      "verify_with_official_source": ["Which rules apply in the visitor's jurisdiction?", "Where is the current official tenancy guidance published?"]
+    },
+    {
+      "id": "sample-housing-support-navigation",
+      "title": "Housing support information navigation",
+      "category": "housing",
+      "region": "general",
+      "overview": "A fictional example showing how an information service might explain the difference between general housing support information and an official application.",
+      "topics": ["public information", "support categories", "application route", "official verification"],
+      "verify_with_official_source": ["Which public authority manages this service?", "What are the current official eligibility rules and deadlines?"]
+    },
+    {
+      "id": "sample-izmir-information-checklist",
+      "title": "Izmir housing information checklist",
+      "category": "housing",
+      "region": "izmir",
+      "overview": "A fictional checklist of questions to ask an official local source. It does not describe a real municipal programme.",
+      "topics": ["local authority", "residency requirements", "official application channel", "document checklist"],
+      "verify_with_official_source": ["Which official local authority page lists the programme?", "Are the rules current for the visitor's district?"]
+    },
+    {
+      "id": "sample-accessibility-information",
+      "title": "Accessible-housing information topics",
+      "category": "housing",
+      "region": "general",
+      "overview": "A sample index of accessibility-related housing topics. It does not assess a person's medical status or entitlement.",
+      "topics": ["step-free access", "building access", "adaptations", "reasonable adjustments"],
+      "verify_with_official_source": ["Which public body provides the current accessibility guidance?", "What evidence, if any, does the official process require?"]
+    },
+    {
+      "id": "sample-tenancy-repairs",
+      "title": "Repairs and maintenance information",
+      "category": "tenancy",
+      "region": "general",
+      "overview": "A fictional summary of common questions about repairs and maintenance responsibilities.",
+      "topics": ["urgent repairs", "routine maintenance", "written notice", "inspection records"],
+      "verify_with_official_source": ["Which local legal rules apply?", "Where can the visitor find official advice for their jurisdiction?"]
+    }
+  ]
+}

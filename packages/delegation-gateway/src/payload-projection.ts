@@ -1,6 +1,19 @@
-import type { JsonValue, DisclosureField, FieldDecision } from "./types.js";
+import type { JsonValue, DisclosureField, FieldDecision } from "./types.ts";
 
-/** Reject prototype-sensitive object keys at every depth. */
+const blockedPathSegments = new Set(["__proto__", "prototype", "constructor"]);
+
+function validatePath(path: string): string[] {
+  const segments = path.split(".");
+  if (
+    !path ||
+    segments.length === 0 ||
+    segments.some((segment) => !segment || blockedPathSegments.has(segment))
+  ) {
+    throw new TypeError("Disclosure paths must be valid and must not contain prototype-sensitive keys.");
+  }
+  return segments;
+}
+
 function assertSafeRecord(value: JsonValue, path = "$"): void {
   if (Array.isArray(value)) {
     value.forEach((item, index) => assertSafeRecord(item, `${path}[${index}]`));
@@ -8,7 +21,7 @@ function assertSafeRecord(value: JsonValue, path = "$"): void {
   }
   if (value !== null && typeof value === "object") {
     for (const [key, child] of Object.entries(value)) {
-      if (key === "__proto__" || key === "prototype" || key === "constructor") {
+      if (blockedPathSegments.has(key)) {
         throw new TypeError(`Unsafe property name at ${path}.`);
       }
       assertSafeRecord(child, `${path}.${key}`);
@@ -17,10 +30,9 @@ function assertSafeRecord(value: JsonValue, path = "$"): void {
 }
 
 function getPath(source: Record<string, JsonValue>, path: string): JsonValue | undefined {
-  const segments = path.split(".");
   let current: JsonValue | undefined = source;
-  for (const segment of segments) {
-    if (!segment || current === null || Array.isArray(current) || typeof current !== "object") {
+  for (const segment of validatePath(path)) {
+    if (current === null || Array.isArray(current) || typeof current !== "object") {
       return undefined;
     }
     current = (current as Record<string, JsonValue>)[segment];
@@ -29,7 +41,7 @@ function getPath(source: Record<string, JsonValue>, path: string): JsonValue | u
 }
 
 function setPath(target: Record<string, JsonValue>, path: string, value: JsonValue): void {
-  const segments = path.split(".");
+  const segments = validatePath(path);
   let current = target;
   for (const segment of segments.slice(0, -1)) {
     const existing = current[segment];
@@ -43,20 +55,6 @@ function setPath(target: Record<string, JsonValue>, path: string, value: JsonVal
   current[segments.at(-1)!] = value;
 }
 
-function hasOnlyAllowedPaths(value: JsonValue, prefix: string, allowed: Set<string>): boolean {
-  if (Array.isArray(value)) {
-    return allowed.has(prefix);
-  }
-  if (value !== null && typeof value === "object") {
-    for (const [key, child] of Object.entries(value)) {
-      const childPath = prefix ? `${prefix}.${key}` : key;
-      if (!hasOnlyAllowedPaths(child, childPath, allowed)) return false;
-    }
-    return true;
-  }
-  return allowed.has(prefix);
-}
-
 export interface ProjectionResult {
   payload: Record<string, JsonValue>;
   sharedPaths: string[];
@@ -65,7 +63,7 @@ export interface ProjectionResult {
 
 /**
  * Build the exact peer payload from explicit user-selected paths.
- * Unspecified fields and undeclared payload paths are always withheld.
+ * Unspecified and undeclared fields are never copied into the peer payload.
  */
 export function projectPayload(
   source: Record<string, JsonValue>,
@@ -77,6 +75,18 @@ export function projectPayload(
   const declared = new Map(fields.map((field) => [field.path, field]));
   if (declared.size !== fields.length) {
     throw new TypeError("Disclosure field paths must be unique.");
+  }
+
+  const sortedPaths = [...declared.keys()].sort();
+  for (let index = 0; index < sortedPaths.length; index += 1) {
+    const current = validatePath(sortedPaths[index]!);
+    for (const otherPath of sortedPaths.slice(index + 1)) {
+      const other = validatePath(otherPath);
+      const common = Math.min(current.length, other.length);
+      if (current.slice(0, common).every((part, i) => part === other[i])) {
+        throw new TypeError("Disclosure paths must not overlap.");
+      }
+    }
   }
 
   const decisionMap = new Map(decisions.map((decision) => [decision.path, decision.share]));
@@ -105,20 +115,6 @@ export function projectPayload(
       sharedPaths.push(field.path);
     } else {
       withheldPaths.push(field.path);
-    }
-  }
-
-  // No extra request fields can leak to the peer, even if a model adds them.
-  const allowed = new Set(sharedPaths);
-  if (!hasOnlyAllowedPaths(source as JsonValue, "", allowed)) {
-    // The caller can supply a wider context object, but only fields explicitly
-    // declared in the disclosure contract may be forwarded.
-    // This is intentionally a fail-closed error to catch a missing field declaration.
-    const topKeys = Object.keys(source);
-    const declaredTopKeys = new Set(fields.map((field) => field.path.split(".")[0]));
-    const undeclared = topKeys.filter((key) => !declaredTopKeys.has(key));
-    if (undeclared.length) {
-      // Extra source keys are not copied into the resulting projected payload.
     }
   }
 

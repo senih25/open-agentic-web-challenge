@@ -22,9 +22,9 @@ The partner is deliberately read-only and uses fictional sample data. It cannot 
 
 ## Current implementation status
 
-The local two-origin MVP is implemented and builds successfully. The repository has unit/security tests and a repeatable two-origin conformance check. The normal-browser pages load without console errors in the tested Chrome session.
+The two-site MVP is deployed on separate public HTTPS origins through Cloudflare Pages. Both production builds completed from the merged `main` commit, and both pages load in the normal Chrome profile without console errors or warnings. The public partner manifest, resolved network, links, action bridge, bridge manifest and bridge actions pass the cross-origin conformance checker from the real TrustMesh caller origin. A repeatable public-origin smoke check is available as `npm run test:public`.
 
-**This is not yet a fully submitted or publicly deployed entry.** A real provider-backed chat run, externally hosted HTTPS deployments, clean-browser public-origin interoperability, final screenshots, a personally recorded demo video and the Devpost submission remain release gates. The built-in browser mock is deterministic test scaffolding, not a real LLM, and must never be enabled on public origins.
+**The entry is deployed, but not yet submission-complete.** A real provider-backed chat run and browser-driven two-stage peer handoff have not yet been verified; the live sites currently require a visitor-supplied AI provider key. Final screenshots, the entrant's personally recorded sub-2-minute demo video, and the Devpost submission remain release gates. The built-in browser mock is deterministic test scaffolding, not a real LLM, and is blocked for public origins.
 
 Conformance is claimed only for the specific checks listed in [the compliance matrix](docs/CHALLENGE_COMPLIANCE.md), not for the full challenge profile.
 

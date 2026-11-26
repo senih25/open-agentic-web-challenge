@@ -2,16 +2,30 @@
 
 ## Cloudflare Pages projects
 
-The public deployment uses two separate Cloudflare Pages projects connected to the GitHub repository `senih25/open-agentic-web-challenge`.
+The two sites are independently deployed through Cloudflare Pages and connected to the GitHub repository `senih25/open-agentic-web-challenge`.
 
 | Site | Pages project | Production origin | Build command | Output directory |
 |---|---|---|---|---|
 | TrustMesh caller | `trustmesh-agentic-web` | https://trustmesh-agentic-web.pages.dev | `npm run pages:build:trustmesh` with both origin variables | `dist/trustmesh-site` |
 | Open Housing Guide partner | `trustmesh-open-housing-guide` | https://trustmesh-open-housing-guide.pages.dev | `npm run pages:build:partner` with both origin variables | `dist/partner-demo-site` |
 
-Both projects use the repository root as their build root and Node.js 24 via `.nvmrc`. Production deployments are enabled from `main`; preview deployments are disabled until the cross-origin preview configuration is separately designed.
+Both projects use the repository root as their build root, Node.js 24 via `.nvmrc`, and the `main` branch for production deployments. Pages may also show preview deployment records for pull requests or Dependabot branches; those are not the production origins.
 
-Build environment values must match exactly on both projects:
+## Verified production release
+
+- GitHub PR: https://github.com/senih25/open-agentic-web-challenge/pull/18
+- Main commit: `20c9b9676ba12382830c8da882a4baaebe103b7e`
+- TrustMesh production deployment: Cloudflare deployment `3f40a901`, completed successfully.
+- Open Housing Guide production deployment: Cloudflare deployment `a3aaa9c8`, completed successfully.
+- Both deployments were built from the same `main` commit.
+- Both stable production URLs returned HTTP 200 in the normal Chrome profile.
+- Both pages returned no browser console errors or warnings in the inspected production session.
+
+The pages are publicly reachable. The user-facing chat does not start a real model until the visitor configures their own AI provider key.
+
+## Required build environment
+
+Both projects must use the same values:
 
 - `TRUSTMESH_ORIGIN=https://trustmesh-agentic-web.pages.dev`
 - `PARTNER_ORIGIN=https://trustmesh-open-housing-guide.pages.dev`
@@ -32,24 +46,35 @@ Partner project:
 TRUSTMESH_ORIGIN=https://trustmesh-agentic-web.pages.dev PARTNER_ORIGIN=https://trustmesh-open-housing-guide.pages.dev npm run pages:build:partner
 ```
 
-The commands sync the patched runtime, regenerate public manifests and resolved networks, and build only the relevant site. Both commands were run locally with the production HTTPS origins and the generated origins were verified.
+The commands sync the patched runtime, regenerate public manifests and resolved networks, and build only the relevant site.
 
 ## CORS and headers
 
-Static CORS headers are applied only to the public artifacts required for discovery and execution: `agent-manifest.json`, resolved `*.network.json`, `links.json`, `.well-known/*`, `bridge/*` and `runtime/*`. All other paths receive baseline security headers without blanket CORS.
+CORS is enabled only for public discovery/execution artifacts: `agent-manifest.json`, resolved `*.network.json`, `links.json`, `.well-known/*`, `bridge/*` and `runtime/*`. Other paths receive baseline security headers without blanket CORS.
 
 CORS makes public artifacts fetchable; it is not authorization. Runtime origin policy and explicit user consent remain mandatory.
 
-## Release sequence
+## Public-origin smoke test
 
-1. Merge the reviewed pull request to `main`.
-2. Confirm both Cloudflare Pages builds complete from the same commit.
-3. Open both production URLs in a clean browser.
-4. Verify the caller manifest allows the exact partner origin and references the partner network URL.
-5. Run the partner checker against the public origin using the actual caller Origin.
-6. Confirm browser console/network behavior and record screenshots.
-7. Do not enable the deterministic local mock on public origins. A real provider-backed model workflow must be tested separately.
+From a machine with Node.js 24 and network access:
 
-## Known deployment limitation
+```powershell
+npm ci
+npm run test:public
+```
 
-The local release candidate has not demonstrated a real provider-backed model conversation. A public static deployment does not, by itself, prove the model can select tools correctly, complete the user consent workflow or synthesize peer evidence. That workflow remains an explicit release-evidence gate.
+The command checks both production page roots and public discovery/runtime/bridge artifacts, CORS response headers, caller `allowed_peers`, the caller's partner network URL, the partner network's public front agent, and the bridge's exact `callerOrigins` allowlist.
+
+The public conformance checker can also be run directly:
+
+```powershell
+node packages/conformance/scripts/check_partner.mjs https://trustmesh-open-housing-guide.pages.dev/open_housing_guide --origin https://trustmesh-agentic-web.pages.dev
+```
+
+The partner bridge HTML path is canonicalized by Cloudflare Pages from `/bridge/action-bridge.html` to `/bridge/action-bridge` on the same origin. The checker follows this same-origin redirect and confirms the bridge resource is available.
+
+## Release limitations
+
+Public hosting and cross-origin artifact discovery are verified, but this is not yet proof of a complete real-model task. A provider-backed chat conversation, browser-driven discovery consent, exact field approval, partner invocation and final synthesized response must still be demonstrated with a real provider key in a clean browser session.
+
+Do not enable the deterministic local mock on public origins. A real provider-backed model workflow must be tested separately. The demo dataset remains fictional and read-only.

@@ -5,7 +5,7 @@
 - Node.js 24
 - npm
 - A modern browser
-- No API key is required for the local deterministic mock demonstration
+- No API key is required for local deterministic mock tests; a real browser conversation requires a visitor's own provider key
 
 ## Start the two independent origins
 
@@ -23,7 +23,7 @@ Terminal 2:
 npm run dev:partner
 ```
 
-Open these URLs in a normal browser:
+Open these distinct local origins in a normal browser:
 
 - TrustMesh caller site: http://127.0.0.1:4173/
 - Independent partner site: http://localhost:4174/
@@ -32,7 +32,7 @@ These are separate origins. Do not replace one hostname with the other: the host
 
 ## Optional local mock mode
 
-The mock is deterministic and is not a real language model. It must never be deployed publicly.
+The mock is deterministic test scaffolding and is not a real language model. It must never be deployed publicly.
 
 ```powershell
 $env:TRUSTMESH_DEMO_MOCK = "true"
@@ -42,28 +42,36 @@ Remove-Item Env:TRUSTMESH_DEMO_MOCK
 
 The builder rejects mock mode if either configured origin is not a loopback host. Production builds omit this flag and retain the published BYOK configuration.
 
-## Automated two-origin check
+## Automated local and public checks
+
+Local two-origin conformance:
 
 ```powershell
 npm run test:two-origin
 ```
 
-The check builds both public networks, starts the local servers if they are not already running, checks their manifests, and runs the upstream-derived partner conformance checker with the actual caller Origin. It verifies public manifest/network/links/bridge retrieval and the partner bridge's caller-origin allowlist.
+Public production deployment smoke check:
 
-## Test and production build
+```powershell
+npm run test:public
+```
+
+The public check validates both roots, manifest/network/links/runtime/bridge resources, CORS headers, the caller's peer allowlist and the partner bridge's exact caller-origin allowlist.
+
+## Complete local acceptance gate
 
 ```powershell
 npm run check
 ```
 
-This runs TypeScript checks, unit/security tests, and production builds for both sites.
+This runs TypeScript checks, unit/security tests, the local two-origin check and production builds for both sites.
 
-## What the local demo does not prove
+## What the current public demo does not prove
 
-- Public HTTPS hosting or availability from an external network.
-- A real model's tool selection, reasoning, or natural-language synthesis.
+- A real model's tool selection, reasoning or natural-language synthesis.
+- The full browser-driven two-stage peer consent and execution journey.
 - A live external MCP service or production credentials.
 - Publisher identity or a signed, non-repudiable receipt.
-- Devpost eligibility confirmation, video ownership, or final submission.
+- Devpost eligibility confirmation, video ownership or final submission.
 
-Do not describe a mock response as a real LLM response. Do not present fictional dataset entries as official services.
+Do not describe a mock response as a real LLM response. Do not present fictional sample records as official services.

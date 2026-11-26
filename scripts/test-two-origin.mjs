@@ -66,6 +66,9 @@ async function ensureServer(url, config, host, port, label) {
 }
 
 try {
+  // The checker must work from a clean checkout, not rely on runtime assets left by
+  // a developer's earlier build or ignored files in the workspace.
+  runNode(path.join(root, "scripts", "sync-runtime.mjs"));
   runNode(path.join(root, "scripts", "build-networks.mjs"));
   await Promise.all([
     ensureServer(mainUrl, "vite.config.ts", "127.0.0.1", 4173, "TrustMesh"),

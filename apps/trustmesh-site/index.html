@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2d">
+  <meta name="description" content="TrustMesh gives you control over what independent AI agents receive when they hand off a service request.">
+  <title>TrustMesh — Service handoff, on your terms</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="TrustMesh home">
+      <span class="brand-mark" aria-hidden="true">T</span>
+      <span>trustmesh<span class="brand-dot">.</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#privacy">Privacy model</a>
+      <a class="nav-cta" href="#workspace">Open workspace</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pulse"></span> OPEN AGENTIC WEB · PROFILE 0.2</p>
+        <h1>Get help across the web.<br><span>Keep control of your data.</span></h1>
+        <p class="hero-lede">TrustMesh lets independent AI agents work together on your service request — while you decide exactly what each website receives.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#workspace">Try the consent preview <span aria-hidden="true">↗</span></a>
+          <a class="button button-quiet" href="#how-it-works">See how it works</a>
+        </div>
+        <div class="trust-points">
+          <div><span class="check">✓</span> Field-by-field sharing</div>
+          <div><span class="check">✓</span> Approval before every new site</div>
+          <div><span class="check">✓</span> A receipt of what was shared</div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Illustration of a user-controlled request moving between two independent agent websites">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="node-card node-user">
+          <span class="node-icon user-icon">Y</span>
+          <span><b>Your request</b><small>Private by default</small></span>
+          <span class="node-status">LOCAL</span>
+        </div>
+        <div class="flow-line"><span></span><span></span><span></span></div>
+        <div class="consent-chip"><span class="lock">⌑</span> You approve what moves</div>
+        <div class="node-card node-peer">
+          <span class="node-icon peer-icon">✳</span>
+          <span><b>Partner agent</b><small>Independent website</small></span>
+          <span class="node-status peer-status">SCOPED</span>
+        </div>
+        <div class="receipt-mini"><span class="receipt-icon">▤</span><span><b>Disclosure receipt</b><small>Shared 2 fields · Withheld 3</small></span><span class="receipt-check">✓</span></div>
+        <div class="visual-caption">A local consent simulation. No cross-site call is made.</div>
+      </div>
+    </section>
+
+    <section class="metrics-strip" aria-label="TrustMesh principles">
+      <div><strong>01</strong><span>See the destination</span></div>
+      <div><strong>02</strong><span>Choose each field</span></div>
+      <div><strong>03</strong><span>Approve this request</span></div>
+      <div><strong>04</strong><span>Keep the receipt</span></div>
+    </section>
+
+    <section class="workspace-section" id="workspace">
+      <div class="section-heading">
+        <p class="eyebrow">INTERACTIVE DEMONSTRATION</p>
+        <h2>Your request. Your rules.</h2>
+        <p>Prepare a sample request and see how TrustMesh limits what a partner website can receive. This preview uses synthetic data only; it does not contact an external service.</p>
+      </div>
+
+      <div class="workspace-grid">
+        <section class="panel request-panel" aria-labelledby="request-title">
+          <div class="panel-topline"><span class="step-number">01</span><span class="panel-kicker">REQUEST BUILDER</span><span class="local-tag">LOCAL ONLY</span></div>
+          <h3 id="request-title">What do you need help with?</h3>
+          <label class="field-label" for="service-category">Service category</label>
+          <select id="service-category">
+            <option value="housing">Housing information</option>
+            <option value="education">Education support</option>
+            <option value="employment">Employment services</option>
+          </select>
+          <label class="field-label" for="request-summary">A short summary</label>
+          <textarea id="request-summary" rows="3" maxlength="240">I need to understand which public housing support services may be relevant.</textarea>
+          <div class="field-hint"><span>Sample request · No personal details needed</span><span id="summary-count">83 / 240</span></div>
+          <div class="request-destination"><span class="destination-icon">◎</span><span><b>Simulated partner</b><small>Simulated Benefits Guide · local demo</small></span><span class="arrow">↗</span></div>
+          <button class="button button-primary button-full" id="prepare-request">Prepare controlled handoff <span aria-hidden="true">→</span></button>
+          <p class="microcopy">Nothing is sent when you prepare a request.</p>
+        </section>
+
+        <section class="panel consent-panel" aria-labelledby="consent-title">
+          <div class="panel-topline"><span class="step-number">02</span><span class="panel-kicker">DISCLOSURE REVIEW</span><span class="status-pill" id="review-status">NOT PREPARED</span></div>
+          <h3 id="consent-title">Choose what to share</h3>
+          <p class="panel-description">The partner only receives fields you explicitly allow. Unlisted data stays on this page.</p>
+          <div class="peer-banner">
+            <span class="peer-avatar">OB</span>
+            <span><b>Open Benefits Guide</b><small>SIMULATED PEER · No request leaves this page</small></span>
+            <span class="external-mark">↗</span>
+          </div>
+          <div class="disclosure-list" id="disclosure-list">
+            <div class="disclosure-empty">Prepare your request to review the exact fields.</div>
+          </div>
+          <div class="payload-summary"><span>Fields approved to share</span><b id="share-count">0 of 3</b></div>
+          <div class="consent-actions">
+            <button class="button button-quiet" id="reject-handoff" disabled>Keep everything here</button>
+            <button class="button button-primary" id="approve-handoff" disabled>Approve this handoff</button>
+          </div>
+          <p class="microcopy" id="consent-note">Approval is for this request only. A different site or changed request needs a new review.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="receipt-section" id="receipt" aria-labelledby="receipt-title">
+      <div class="receipt-heading">
+        <div>
+          <p class="eyebrow">TRANSPARENT BY DESIGN</p>
+          <h2 id="receipt-title">Your disclosure receipt</h2>
+          <p>A clear record of the fields shared, fields withheld and the decision you made.</p>
+        </div>
+        <span class="receipt-seal">◈ <b>USER CONTROLLED</b></span>
+      </div>
+      <div class="receipt-card" id="receipt-card">
+        <div class="receipt-placeholder"><span class="placeholder-icon">▤</span><b>No handoff yet</b><span>Prepare a request and make a decision to create a local receipt.</span></div>
+      </div>
+      <div class="receipt-actions">
+        <button class="button button-secondary" id="download-receipt" disabled>Download receipt JSON ↓</button>
+        <span class="receipt-note">Receipt stores field names and digests, not the sample values.</span>
+      </div>
+    </section>
+
+    <section class="how-section" id="how-it-works">
+      <div class="section-heading">
+        <p class="eyebrow">FOUR SIMPLE STEPS</p>
+        <h2>Collaboration without the blind handoff.</h2>
+      </div>
+      <div class="steps-grid">
+        <article><span class="step-number">01</span><h3>Describe the task</h3><p>Start on the website you chose. Your request and private context stay with you until a specific handoff is approved.</p></article>
+        <article><span class="step-number">02</span><h3>Review the destination</h3><p>See the independent website, the agent and the reason it needs to be contacted.</p></article>
+        <article><span class="step-number">03</span><h3>Choose each field</h3><p>Allow only the information needed for this task. Unlisted fields are never added to the partner payload.</p></article>
+        <article><span class="step-number">04</span><h3>Keep the evidence</h3><p>Review a redacted receipt with the origin, request digest, field decisions and outcome.</p></article>
+      </div>
+    </section>
+
+    <section class="privacy-section" id="privacy">
+      <div class="privacy-copy">
+        <p class="eyebrow">PRIVACY MODEL</p>
+        <h2>Private by default.<br><span>Specific by permission.</span></h2>
+        <p>TrustMesh is built around explicit data boundaries. A valid agent network is not automatically a trusted agent. Every external origin is reviewed, every request is scoped and every result is treated as untrusted until validated.</p>
+      </div>
+      <div class="privacy-list">
+        <div><span class="privacy-icon">⌑</span><span><b>No shared browser session</b><small>Credentials, cookies and local browser data never belong in a peer request.</small></span></div>
+        <div><span class="privacy-icon">↗</span><span><b>One origin at a time</b><small>Every new external website needs its own approval.</small></span></div>
+        <div><span class="privacy-icon">▤</span><span><b>Redacted evidence</b><small>The receipt records disclosure decisions, not private field values.</small></span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/"><span class="brand-mark">T</span><span>trustmesh<span class="brand-dot">.</span></span></a>
+    <span>Open Agentic Web Challenge · MVP Profile 0.2 baseline</span>
+    <span>Built for user-controlled agent collaboration.</span>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

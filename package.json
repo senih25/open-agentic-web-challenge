@@ -1,0 +1,22 @@
+{
+  "name": "trustmesh-open-agentic-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TrustMesh: consent-carrying service handoffs for the Open Agentic Web",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "vite build --config vite.config.ts",
+    "preview": "vite preview --config vite.config.ts",
+    "typecheck": "tsc --noEmit -p packages/delegation-gateway/tsconfig.json",
+    "test": "vitest run",
+    "test:gateway": "vitest run packages/delegation-gateway/tests",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.8",
+    "vitest": "^4.0.14"
+  }
+}

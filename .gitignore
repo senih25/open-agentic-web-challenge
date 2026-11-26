@@ -12,3 +12,6 @@ test-results/
 Thumbs.db
 .vscode/
 .idea/
+
+# Local upstream reference checkout (never publish as vendored source)
+_upstream/

@@ -39,3 +39,16 @@ jobs:
           printf '%s  %s\n' \
             '5d12f6f7a6fe50cb34aebd4258af3e8ff6bd81f286e4ade232b8c9b3583f222a' \
             'spec/pinned/worldwide_agentic_web_mvp_spec.md' | sha256sum --check --status
+
+  gateway:
+    name: Delegation gateway
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test:gateway

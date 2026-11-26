@@ -15,3 +15,9 @@ Thumbs.db
 
 # Local upstream reference checkout (never publish as vendored source)
 _upstream/
+
+# Local upstream-derived inspection copy (excluded pending audit)
+packages/conformance/build_network.mjs
+packages/conformance/check_partner.mjs
+packages/conformance/serve_site.mjs
+packages/web-runtime/src/

@@ -33,3 +33,9 @@ jobs:
           test -s docs/CHALLENGE_COMPLIANCE.md
           test -s docs/THREAT_MODEL.md
           test -s spec/pinned/README.md
+      - name: Verify pinned challenge specification checksum
+        shell: bash
+        run: |
+          printf '%s  %s\n' \
+            '5d12f6f7a6fe50cb34aebd4258af3e8ff6bd81f286e4ade232b8c9b3583f222a' \
+            'spec/pinned/worldwide_agentic_web_mvp_spec.md' | sha256sum --check --status

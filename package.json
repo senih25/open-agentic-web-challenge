@@ -23,6 +23,7 @@
     "test:gateway": "vitest run packages/delegation-gateway/tests",
     "test:runtime": "vitest run packages/web-runtime/tests",
     "test:two-origin": "node scripts/test-two-origin.mjs",
+    "test:public": "node scripts/test-public-deployment.mjs",
     "check": "npm run typecheck && npm test && npm run test:two-origin && npm run build"
   },
   "devDependencies": {

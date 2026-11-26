@@ -1,0 +1,54 @@
+{
+  "notice": "FICTIONAL DEMONSTRATION DATA — not an official public-service directory, not live availability, and not legal or eligibility advice.",
+  "categories": ["housing", "tenancy", "employment", "education", "utilities", "general"],
+  "services": [
+    {
+      "id": "sample-housing-navigation",
+      "title": "Housing information navigation",
+      "category": "housing",
+      "description": "A sample entry showing how a visitor might discover general housing information topics and referral routes.",
+      "tags": ["rent", "housing", "guidance", "public information"],
+      "source_type": "fictional demo record"
+    },
+    {
+      "id": "sample-tenant-information",
+      "title": "Tenant information overview",
+      "category": "tenancy",
+      "description": "A fictional overview of common tenant-information topics such as repairs, written agreements and where to find authoritative guidance.",
+      "tags": ["tenant", "renter", "repairs", "agreement"],
+      "source_type": "fictional demo record"
+    },
+    {
+      "id": "sample-employment-navigation",
+      "title": "Employment information navigation",
+      "category": "employment",
+      "description": "A sample navigation record for public information about job-search support, work rights and training.",
+      "tags": ["jobs", "work", "training", "employment"],
+      "source_type": "fictional demo record"
+    },
+    {
+      "id": "sample-education-navigation",
+      "title": "Education information navigation",
+      "category": "education",
+      "description": "A fictional example for finding public information about adult learning, course search and education support.",
+      "tags": ["education", "course", "learning"],
+      "source_type": "fictional demo record"
+    },
+    {
+      "id": "sample-utility-support",
+      "title": "Utility support information",
+      "category": "utilities",
+      "description": "A fictional sample for understanding general utility-support information and where an official provider may publish its rules.",
+      "tags": ["energy", "water", "utilities", "bills"],
+      "source_type": "fictional demo record"
+    },
+    {
+      "id": "sample-public-contact-checklist",
+      "title": "Preparing to contact an official service",
+      "category": "general",
+      "description": "A checklist of general questions a visitor may wish to ask an official service directly. It does not collect or submit personal data.",
+      "tags": ["contact", "checklist", "official service"],
+      "source_type": "fictional demo record"
+    }
+  ]
+}

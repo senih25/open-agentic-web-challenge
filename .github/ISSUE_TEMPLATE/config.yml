@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security report
+    url: https://github.com/senih25/open-agentic-web-challenge/security/advisories/new
+    about: Report vulnerabilities privately. Do not publish exploitable details in an issue.

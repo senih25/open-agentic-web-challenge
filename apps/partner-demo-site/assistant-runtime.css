@@ -1,0 +1,23 @@
+/* Runtime assistant layout adapted from the Apache-2.0 Agentic Web starter. */
+#assistant-status { color: #68827a; font-size: 10px; }
+#agent-app {
+  --ns-font: "DM Sans",sans-serif;
+  --ns-bg: #ffffff;
+  --ns-fg: #17352f;
+  --ns-primary: #11977d;
+  --ns-accent: #11977d;
+  --ns-border: #dfebe6;
+  --ns-panelbg: #ffffff;
+  --ns-msgbg: #f3f8f6;
+  --ns-muted: #6d8179;
+}
+.assistant-panels { display: grid; grid-template-columns: minmax(0,1fr) 240px; gap: 16px; margin-top: 16px; }
+#agent-app.ns-composed-app [data-ns-slot="chat"] { height: 650px; }
+#agent-app .ns-chat { background: var(--ns-bg); }
+#agent-app input[type="checkbox"],#agent-app input[type="radio"]{width:auto}
+#agent-app .ns-widget label{margin:0}
+#agent-app button{margin:0}
+#agent-app .ns-consent-actions{flex-wrap:wrap}
+#agent-app .ns-consent-actions button{white-space:nowrap}
+#agent-app .ns-msg{overflow-wrap:break-word}
+@media(max-width:760px){.assistant-panels{grid-template-columns:1fr}}

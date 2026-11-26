@@ -3,7 +3,7 @@ import {
   createDisclosureReceipt,
   preparePeerRequest,
   verifyDisclosureReceipt,
-} from "../../packages/delegation-gateway/src/index.js";
+} from "../../packages/delegation-gateway/src/index.ts";
 
 const PEER = {
   url: "https://benefits.example/guide",
@@ -289,3 +289,117 @@ el("reject-handoff").addEventListener("click", () => void recordDecision(false).
 }));
 el("download-receipt").addEventListener("click", downloadReceipt);
 updateSummaryCount();
+
+
+// Cross-site peer receipts are emitted by site-runtime.ts after the visitor
+// approves or rejects the exact structured payload. Raw field values are never
+// stored in this view or in the exported receipt.
+const peerReceipts = new Map();
+
+function renderPeerReceipts() {
+  const container = el("peer-receipt-list");
+  if (!container) return;
+  container.replaceChildren();
+
+  if (!peerReceipts.size) {
+    const empty = document.createElement("p");
+    empty.className = "peer-receipts-empty";
+    empty.textContent = "No cross-site handoff has been approved in this session.";
+    container.append(empty);
+    return;
+  }
+
+  for (const entry of [...peerReceipts.values()].reverse()) {
+    const receipt = entry.receipt;
+    const card = document.createElement("article");
+    card.className = "peer-receipt-card";
+
+    const heading = document.createElement("div");
+    heading.className = "peer-receipt-heading";
+    const title = document.createElement("strong");
+    title.textContent = String(receipt.peerLabel || "Independent peer");
+    const status = document.createElement("span");
+    status.className = `peer-receipt-status ${entry.outcome || receipt.decision}`;
+    status.textContent = String(entry.outcome || receipt.decision || "recorded").toUpperCase();
+    heading.append(title, status);
+
+    const origin = document.createElement("p");
+    origin.className = "peer-receipt-origin";
+    origin.textContent = `${receipt.peerOrigin || ""} · ${receipt.networkName || ""}`;
+
+    const fields = document.createElement("div");
+    fields.className = "peer-receipt-fields";
+    for (const field of receipt.fields || []) {
+      const item = document.createElement("span");
+      item.className = field.disposition === "shared" ? "shared" : "withheld";
+      item.textContent = `${field.label}: ${field.disposition}`;
+      fields.append(item);
+    }
+
+    const digest = document.createElement("p");
+    digest.className = "peer-receipt-digest";
+    digest.textContent = `Payload SHA-256: ${String(receipt.payloadDigest || "").slice(0, 24)}… · Receipt SHA-256: ${String(receipt.receiptDigest || "").slice(0, 24)}…`;
+
+    const evidence = document.createElement("p");
+    evidence.className = "peer-receipt-digest";
+    if (entry.responseDigest) {
+      evidence.textContent = `Peer response SHA-256: ${entry.responseDigest.slice(0, 24)}…`;
+    } else if (entry.outcome === "unknown") {
+      evidence.textContent = "The peer response could not be verified. Do not assume the task completed.";
+    } else {
+      evidence.textContent = "No raw request values or private context are stored in this receipt.";
+    }
+
+    const download = document.createElement("button");
+    download.className = "button button-quiet peer-receipt-download";
+    download.textContent = "Export receipt JSON";
+    download.addEventListener("click", () => {
+      const exportData = {
+        disclosureReceipt: receipt,
+        peerResult: {
+          outcome: entry.outcome || "awaiting",
+          responseDigest: entry.responseDigest || null,
+          recordedAt: entry.resultRecordedAt || null,
+          note: "The disclosure receipt digest covers the consent record. The peer-result digest is separate evidence and does not prove the publisher's identity."
+        }
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `trustmesh-peer-receipt-${String(receipt.receiptId || "record").slice(0, 10)}.json`;
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    card.append(heading, origin, fields, digest, evidence, download);
+    container.append(card);
+  }
+}
+
+window.addEventListener("trustmesh:peer-consent", (event) => {
+  const receipt = event.detail;
+  if (!receipt || typeof receipt.receiptId !== "string") return;
+  peerReceipts.set(receipt.receiptId, {
+    receipt,
+    outcome: receipt.decision,
+    responseDigest: null,
+    resultRecordedAt: null
+  });
+  renderPeerReceipts();
+});
+
+window.addEventListener("trustmesh:peer-result", (event) => {
+  const detail = event.detail;
+  if (!detail || typeof detail.receiptId !== "string") return;
+  const entry = peerReceipts.get(detail.receiptId);
+  if (!entry) return;
+  entry.outcome = String(detail.outcome || "unknown");
+  entry.responseDigest = typeof detail.responseDigest === "string" ? detail.responseDigest : null;
+  entry.resultRecordedAt = new Date().toISOString();
+  renderPeerReceipts();
+});
+
+renderPeerReceipts();

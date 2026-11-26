@@ -7,7 +7,9 @@
   <meta name="description" content="TrustMesh gives you control over what independent AI agents receive when they hand off a service request.">
   <title>TrustMesh — Service handoff, on your terms</title>
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./agent-runtime.css">
   <script type="module" src="./app.js"></script>
+  <script type="module" src="./site-runtime.ts"></script>
 </head>
 <body>
   <header class="site-header">
@@ -111,6 +113,21 @@
       </div>
     </section>
 
+    <section class="assistant-section" id="agent-workspace" aria-labelledby="agent-workspace-title">
+      <p class="eyebrow">LIVE AGENT NETWORK · BROWSER EXECUTION</p>
+      <h2 id="agent-workspace-title">Ask TrustMesh to coordinate a task</h2>
+      <p class="assistant-note">Add your own AI provider key in the settings panel. The main agent can use its sample directory and, only after a separate origin approval and field-by-field data review, call the independent Open Housing Guide network.</p>
+      <p id="assistant-status" role="status">Loading the browser runtime…</p>
+      <div id="agent-app">
+        <div data-ns-slot="header"></div>
+        <div class="assistant-panels">
+          <div data-ns-slot="chat"></div>
+          <div data-ns-slot="agents"></div>
+        </div>
+        <div data-ns-slot="settings"></div>
+      </div>
+    </section>
+
     <section class="receipt-section" id="receipt" aria-labelledby="receipt-title">
       <div class="receipt-heading">
         <div>
@@ -119,6 +136,9 @@
           <p>A clear record of the fields shared, fields withheld and the decision you made.</p>
         </div>
         <span class="receipt-seal">◈ <b>USER CONTROLLED</b></span>
+      </div>
+      <div class="peer-receipts" id="peer-receipt-list" aria-live="polite">
+        <p class="peer-receipts-empty">No cross-site handoff has been approved in this session.</p>
       </div>
       <div class="receipt-card" id="receipt-card">
         <div class="receipt-placeholder"><span class="placeholder-icon">▤</span><b>No handoff yet</b><span>Prepare a request and make a decision to create a local receipt.</span></div>

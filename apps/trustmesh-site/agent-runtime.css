@@ -1,0 +1,53 @@
+/* Runtime assistant layout adapted from the Apache-2.0 Agentic Web starter. */
+.assistant-section { max-width: 1120px; margin: 70px auto; padding: 42px 28px; border: 1px solid #e4eaf2; border-radius: 18px; background: #fbfcff; }
+#assistant-status { color: #75839a; font-size: 10px; }
+#agent-app {
+  --ns-font: "DM Sans", sans-serif;
+  --ns-bg: #ffffff;
+  --ns-fg: #17243a;
+  --ns-primary: #315efb;
+  --ns-accent: #315efb;
+  --ns-border: #e0e7f0;
+  --ns-panelbg: #ffffff;
+  --ns-msgbg: #f5f8fc;
+  --ns-muted: #69778e;
+}
+.assistant-panels { display: grid; grid-template-columns: minmax(0,1fr) 240px; gap: 16px; margin-top: 16px; }
+#agent-app.ns-composed-app [data-ns-slot="chat"] { height: 690px; }
+#agent-app .ns-chat { background: var(--ns-bg); }
+#agent-app input[type="checkbox"], #agent-app input[type="radio"] { width: auto; }
+#agent-app .ns-header { flex-wrap: wrap; }
+#agent-app .ns-settings-body label { margin: 4px 0; font-weight: 400; }
+#agent-app .ns-w-label { font-family: inherit; }
+#agent-app .ns-widget label { margin: 0; }
+#agent-app .ns-w-radio label,#agent-app .ns-w-multi label,#agent-app .ns-w-toggle { font-weight: 400; }
+#agent-app .ns-w-toggle { font-size: 13px; }
+#agent-app button { margin: 0; }
+#agent-app .ns-w-choice { color: var(--ns-fg); }
+#agent-app .ns-devtoggle:not(.on):hover,#agent-app .ns-modal-close:hover { background: transparent; }
+#agent-app .ns-w-choice:disabled:hover { background: #fafbfc; }
+#agent-app .ns-consent { background: #fffbeb; }
+#agent-app .ns-msg { overflow-wrap: break-word; }
+#agent-app .ns-consent-actions { flex-wrap: wrap; }
+#agent-app .ns-consent-actions button { white-space: nowrap; }
+body > dialog h2 { margin: 0 0 12px; font: 700 1.25em system-ui,sans-serif; }
+body > dialog button { margin-right: 8px; }
+.tm-peer-consent { width: min(740px,92vw); max-height: 88vh; overflow: auto; border: 1px solid #d8e2f0; border-radius: 16px; padding: 26px; color: #17243a; box-shadow: 0 24px 80px #0d1a2e55; }
+.tm-peer-consent::backdrop { background: #13233a88; backdrop-filter: blur(3px); }
+.tm-peer-consent h2 { font: 800 21px Manrope,"Segoe UI",sans-serif; color: #12233b; margin: 0 0 12px; }
+.tm-consent-origin { color: #315efb; font-size: 11px; font-weight: 800; overflow-wrap: anywhere; }
+.tm-consent-purpose { color: #596a83; font-size: 12px; line-height: 1.6; }
+.tm-consent-hashes,.tm-consent-note { color: #8793a5; font-size: 9px; line-height: 1.6; overflow-wrap: anywhere; }
+.tm-disclosure-fields { display: grid; gap: 8px; margin: 18px 0 12px; }
+.tm-disclosure-field { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 16px; border: 1px solid #e5eaf2; padding: 12px; border-radius: 10px; background: #fbfcff; cursor: pointer; }
+.tm-disclosure-detail { display: grid; gap: 4px; min-width: 0; }
+.tm-disclosure-title { color: #263a56; font-size: 11px; text-transform: capitalize; }
+.tm-disclosure-meta { color: #8a96a8; font-size: 8px; letter-spacing: .6px; }
+.tm-disclosure-value { color: #64728a; background: #f0f3f8; border-radius: 5px; padding: 6px 8px; font-size: 9px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.tm-disclosure-field input { width: 18px; height: 18px; accent-color: #315efb; }
+.tm-consent-count { color: #315efb; font-size: 10px; font-weight: 800; }
+.tm-consent-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.tm-consent-actions button { border-radius: 8px; border: 1px solid #dfe6f0; padding: 11px 15px; font-size: 10px; font-weight: 800; cursor: pointer; }
+.tm-consent-primary { background: #315efb; border-color: #315efb !important; color: white; }
+.tm-consent-secondary { background: white; color: #4c5d75; }
+@media(max-width:760px){.assistant-section{margin:40px 18px;padding:24px 18px}.assistant-panels{grid-template-columns:1fr}.tm-peer-consent{padding:18px}.tm-peer-consent h2{font-size:18px}}

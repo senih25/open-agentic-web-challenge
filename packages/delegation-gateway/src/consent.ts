@@ -1,12 +1,12 @@
-import { canonicalJson, sha256Hex } from "./canonical.js";
-import { projectPayload } from "./payload-projection.js";
+import { canonicalJson, sha256Hex } from "./canonical.ts";
+import { projectPayload } from "./payload-projection.ts";
 import type {
   ConsentDecision,
   DisclosureField,
   FieldDecision,
   JsonValue,
   PeerRequest,
-} from "./types.js";
+} from "./types.ts";
 
 export interface ConsentPolicy {
   ttlMs: number;
@@ -37,8 +37,13 @@ function validateHttpsPeerUrl(raw: string): URL {
 function assertFieldContract(fields: DisclosureField[]): void {
   const seen = new Set<string>();
   for (const field of fields) {
-    if (!field.path || field.path.split(".").some((part) => !part)) {
-      throw new Error("Disclosure field paths must be valid dotted paths.");
+    if (
+      !field.path ||
+      field.path.split(".").some((part) =>
+        !part || ["__proto__", "prototype", "constructor"].includes(part)
+      )
+    ) {
+      throw new Error("Disclosure field paths must be valid and safe dotted paths.");
     }
     if (seen.has(field.path)) throw new Error(`Duplicate disclosure field: ${field.path}`);
     seen.add(field.path);
@@ -150,12 +155,18 @@ export class OneUseConsentStore {
   private readonly used = new Set<string>();
 
   claim(decision: ConsentDecision, now = new Date()): void {
-    if (now.getTime() > Date.parse(decision.expiresAt)) {
+    const expiry = Date.parse(decision.expiresAt);
+    if (!decision.nonce || !decision.requestId || !Number.isFinite(expiry)) {
+      throw new Error("Consent record is incomplete or invalid.");
+    }
+    if (now.getTime() >= expiry) {
       throw new Error("Consent has expired. Ask the user again.");
     }
     if (this.used.has(decision.nonce)) {
       throw new Error("This approval has already been used. Ask the user again.");
     }
+    // This is a synchronous claim with no await between check and write, so a second
+    // caller in the same JS event loop cannot claim the nonce concurrently.
     this.used.add(decision.nonce);
   }
 }

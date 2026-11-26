@@ -1,0 +1,68 @@
+{
+  "brand": "Open Housing Guide",
+  "networks": [
+    {
+      "name": "open_housing_guide",
+      "front_man": "housing_guide_assistant",
+      "hocon": "./open_housing_guide.network.json",
+      "description": "Provides general information topics from a fictional housing-guidance dataset. It does not determine eligibility or submit applications.",
+      "tags": ["agentic-website", "peer-demo", "read-only"],
+      "sample_queries": [
+        "What general housing guidance topics are in the sample dataset?",
+        "Find sample renter information for Izmir.",
+        "Explain the difference between a general overview and an official eligibility decision.",
+        "Which public information topics should I verify directly with an official service?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.openai.com/v1",
+    "mock": false,
+    "byok_router": "https://api.openai.com/v1"
+  },
+  "allowed_peers": [],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "This partner demo publishes a read-only network and does not call further peer origins."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "open_housing_guide",
+    "front_man": "housing_guide_assistant",
+    "available": false,
+    "reason": "This is a static browser bundle. No public MCP facade is exposed."
+  },
+  "theme": {
+    "primary": "#12977f"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "open_housing_guide",
+        "front_man": "housing_guide_assistant",
+        "aliases": ["open_housing_guide", "housing_guide_assistant", "housing guide"],
+        "url": "open_housing_guide"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": ["search_housing_guidance"]
+  }
+}

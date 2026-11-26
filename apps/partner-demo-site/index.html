@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10332f">
+  <meta name="description" content="An independent read-only partner agent with fictional public housing information examples for the TrustMesh interoperability demo.">
+  <title>Open Housing Guide — Independent Agentic Web partner</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./assistant-runtime.css">
+  <script type="module" src="./site-runtime.ts"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span class="brand-mark">O</span>
+      <span>open housing guide<span class="brand-dot">.</span></span>
+    </a>
+    <span class="partner-label">INDEPENDENT PARTNER NETWORK</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">READ-ONLY · SAMPLE DATA · MVP PROFILE 0.2</p>
+        <h1>Housing information,<br><span>without the guesswork.</span></h1>
+        <p class="lede">Open Housing Guide is an independent partner agent that can summarize a small fictional dataset of public-information topics. It does not decide eligibility or submit applications.</p>
+        <div class="hero-points">
+          <span>Read-only capability</span>
+          <span>Caller-controlled model</span>
+          <span>No account or profile access</span>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <span class="panel-kicker">WHAT THIS PARTNER CAN DO</span>
+        <strong>Search sample guidance topics</strong>
+        <p>Find general information categories, show verification questions, and return the matching sample record IDs.</p>
+        <span class="panel-kicker">WHAT IT CANNOT DO</span>
+        <strong>No eligibility decisions or submissions</strong>
+        <p>No forms, appointments, agency contact, identity checks or live programme status.</p>
+      </div>
+    </section>
+
+    <section class="dataset-section">
+      <div class="section-heading">
+        <p class="eyebrow">PUBLIC SAMPLE DATASET</p>
+        <h2>Example guidance topics</h2>
+        <p>All entries below are fictional demo content. Verify real rules and services with the relevant official source.</p>
+      </div>
+      <div id="dataset-status" class="dataset-status" role="status">Loading public sample records…</div>
+      <div id="dataset-grid" class="dataset-grid"></div>
+    </section>
+
+    <section class="assistant-section" aria-labelledby="assistant-heading">
+      <p class="eyebrow">INDEPENDENT AGENTIC WEB NETWORK</p>
+      <h2 id="assistant-heading">Ask Open Housing Guide</h2>
+      <p class="assistant-note">This network runs in the visitor's browser on the caller's selected model and limits. When another site calls this network, only its read-only bridge capability is available.</p>
+      <p id="assistant-status" role="status">Connecting the partner assistant…</p>
+      <div id="agent-app">
+        <div data-ns-slot="header"></div>
+        <div class="assistant-panels">
+          <div data-ns-slot="chat"></div>
+          <div data-ns-slot="agents"></div>
+        </div>
+        <div data-ns-slot="settings"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="/"><span class="brand-mark">O</span><span>open housing guide<span class="brand-dot">.</span></span></a>
+    <span>TrustMesh partner demonstration · Fictional data only</span>
+  </footer>
+  <script type="module" src="./dataset.js"></script>
+</body>
+</html>

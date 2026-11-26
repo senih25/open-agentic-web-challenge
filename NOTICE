@@ -1,0 +1,22 @@
+TrustMesh — Open Agentic Web Challenge
+
+This project includes or adapts code from the following Apache License 2.0 sources:
+
+1. Cognizant Agentic Web
+   https://github.com/cognizant-ai-labs/agentic-web
+   Source checkout reviewed at commit c607e5fd8d6a327ad02bf4c371ce4f809264e747.
+   The browser runtime and Agentify Website build/check/serve scripts and templates are derived from the public Agentic Web starter. See docs/UPSTREAM_PROVENANCE.md.
+
+2. nsDeploy browser runtime
+   https://github.com/cognizant-ai-lab/nsdeploy
+   The Agentic Web starter runtime identifies its nsDeploy base as commit 53a787c (2026-11-11). Upstream notices are retained in packages/web-runtime/LICENSE-NSDEPLOY.txt.
+
+TrustMesh modifications include:
+- Profile 0.2 site-action approval before every write and irreversible action.
+- Read-only-only action bridge exposure for peer networks.
+- Two-stage cross-origin consent: public origin discovery approval, followed by a separate exact JSON field disclosure review after network validation.
+- Fail-closed behavior when consent UI/callback is unavailable.
+- Payload leaf-path and SHA-256 revalidation before peer invocation.
+- Deny-by-default private context across peer boundaries.
+
+All upstream-derived files retain their source notices. TrustMesh-authored code and documentation are licensed under the repository LICENSE.

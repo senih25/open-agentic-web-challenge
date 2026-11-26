@@ -1,4 +1,4 @@
-import type { JsonValue } from "./types.js";
+import type { JsonValue } from "./types.ts";
 
 /**
  * Stable JSON serialization for request binding and receipt digests.

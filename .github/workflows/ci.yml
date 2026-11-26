@@ -32,6 +32,7 @@ jobs:
           test -s README.md
           test -s docs/CHALLENGE_COMPLIANCE.md
           test -s docs/THREAT_MODEL.md
+          test -s docs/DEMO_RUNBOOK.md
           test -s spec/pinned/README.md
       - name: Verify pinned challenge specification checksum
         shell: bash
@@ -40,8 +41,8 @@ jobs:
             '5d12f6f7a6fe50cb34aebd4258af3e8ff6bd81f286e4ade232b8c9b3583f222a' \
             'spec/pinned/worldwide_agentic_web_mvp_spec.md' | sha256sum --check --status
 
-  gateway:
-    name: Delegation gateway
+  build-test-and-conformance:
+    name: Build, unit tests and two-origin conformance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,5 +51,5 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm run test:gateway
+      - name: Run complete local acceptance gate
+        run: npm run check

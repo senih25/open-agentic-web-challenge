@@ -1,0 +1,70 @@
+{
+  "brand": "TrustMesh",
+  "networks": [
+    {
+      "name": "trustmesh_services",
+      "front_man": "trustmesh_assistant",
+      "hocon": "./trustmesh_services.network.json",
+      "description": "Find public service information and, with your approval, ask an independent housing guide for additional general guidance.",
+      "tags": ["agentic-website", "consent-first", "public-service-demo"],
+      "sample_queries": [
+        "Find public information services for housing support in Izmir.",
+        "Compare the general housing guidance topics available from the partner site.",
+        "Show me which data fields would be shared before asking the partner agent.",
+        "Explain what information is not available in this demo."
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.openai.com/v1",
+    "mock": false,
+    "byok_router": "https://api.openai.com/v1"
+  },
+  "allowed_peers": [
+    "__PARTNER_ORIGIN__"
+  ],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Only the separately hosted Open Housing Guide demo is a permitted peer. Contact requires origin approval and a second, field-level data disclosure review."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "trustmesh_services",
+    "front_man": "trustmesh_assistant",
+    "available": false,
+    "reason": "The challenge demo is a static browser bundle. A public MCP facade is not exposed."
+  },
+  "theme": {
+    "primary": "#315efb"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "trustmesh_services",
+        "front_man": "trustmesh_assistant",
+        "aliases": ["trustmesh_services", "trustmesh_assistant", "trustmesh"],
+        "url": "trustmesh_services"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": ["get_service_directory", "search_services"]
+  }
+}
